@@ -1,5 +1,5 @@
 <?php
-$configs = include('/home/cyssndy/Web/foodorder/config.php');
+$configs = include('config.php');
 
 $conn=mysqli_connect($configs['host'],$configs['username'],$configs['password'],$configs['dbname']);
 
