@@ -13,7 +13,7 @@ if (mysqli_connect_errno($conn))
 // $username = $_POST['username'];
 // $password = $_POST['password'];
 
-$result = mysqli_query($conn,"SELECT dish,price FROM menu");
+$result = mysqli_query($conn,"SELECT dish,price,dishtype,imageurl FROM menu");
 
 $encode = array();
 while($row = mysqli_fetch_assoc($result)){
