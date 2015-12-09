@@ -1,36 +1,79 @@
 <?php
 if(isset($_POST['request'])){
-    if($_POST['request'] == "fetch-menu"){
+    if ($_POST['request'] == "fetch-menu" || 
+            $_POST['request'] == "fetch-chief" ||
+            $_POST['request'] == 'submit-order'){
         
         $configs = include('config.php');
-
         $conn=mysqli_connect($configs['host'],$configs['username'],$configs['password'],$configs['dbname']);
-        
-        if (mysqli_connect_errno($conn))
-        {
+        if (mysqli_connect_errno($conn)){
            echo "Failed to connect to MySQL: " . mysqli_connect_error();
         }
         
-        // $username = $_POST['username'];
-        // $password = $_POST['password'];
-        
-        $result = mysqli_query($conn,"SELECT dish,price,dishtype,imageurl FROM menu");
-        
-        $encode = array();
-        while($row = mysqli_fetch_assoc($result)){
-            $encode[] = $row;
+        switch($_POST['request']){
+            case "fetch-menu": {
+                
+                $result = mysqli_query($conn,"SELECT dish,price,dishtype,imageurl FROM menu");
+                
+                $encode = array();
+                while($row = mysqli_fetch_assoc($result)){
+                    $encode[] = $row;
+                }
+                
+                $jsonobj = new stdClass();
+                $jsonobj->fooditems = $encode;
+                
+                echo json_encode($jsonobj);
+                break;
+            };
+            case "fetch-chief":{
+                
+                $result = mysqli_query($conn,"SELECT firstname,lastname FROM chief GROUP BY firshname,lastname");
+                
+                $encode = array();
+                while($row = mysqli_fetch_assoc($result)){
+                    $encode[] = $row;
+                }
+                
+                $jsonobj = new stdClass();
+                $jsonobj->chiefs = $encode;
+                
+                echo json_encode($jsonobj);
+                break;
+            }
+            case "submit-order":{
+                if(!isset($_POST['table-number']) && 
+                        !isset($_POST['dish-name']) && 
+                        !isset($_POST['quantity']) &&
+                        !isset($_POST['comment'])){
+                    echo "failed: not receiving enough data.";
+                    break;
+                }
+                
+                $table_number = $_POST['table-number'];
+                $dish_name = $_POST['dish-name'];
+                $quantity = $_POST['quantity'];
+                $comment = $_POST['comment'];
+                
+                $sql = "INSERT INTO order (tablenumber, dishname, quantity, comment) 
+                        VALUES (" . $table_number . ", " . $dish_name . ", " . $quantity . ", " . $comment . ");" ; 
+                if(mysqli_query($conn,$sql)){
+                    echo "Order submitted successfully.";
+                }else{
+                    echo "Failed to submitted order: perhaps php sql error.";
+                }
+                
+                break;
+            }
         }
         
-        $jsonobj = new stdClass();
-        $jsonobj->fooditems = $encode;
-        
-        echo json_encode($jsonobj);
-        
         mysqli_close($conn);
+        
     }else{
         $response = "<h1> Don't know about this POST request... </h1>";
         echo $response;
     }
+    
 }else{
     $response = "<h1> No POST received </h1>";
     echo $response;
