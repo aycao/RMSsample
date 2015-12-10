@@ -112,7 +112,7 @@ if(isset($_POST['request'])){
     $json = file_get_contents('php://input');
     $obj = json_decode($json,true);
     
-    if($json['header']['request'] == "submit-order"){
+    if($obj['header']['request'] == "submit-order"){
         echo ">>>>>>>>I see you<<<<<<<<";
     }else{
         echo ">>>>>>>>>>na..<<<<<<<<<<";
