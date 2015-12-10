@@ -58,12 +58,17 @@ if(isset($_POST['request'])){
                 break;
             }
             case "submit-order":{
-                if(!isset($_POST['table-number']) && 
-                        !isset($_POST['dish-name']) && 
-                        !isset($_POST['quantity']) &&
-                        !isset($_POST['comment']) &&
+                if(!isset($_POST['table-number']) || 
+                        !isset($_POST['dish-name'])|| 
+                        !isset($_POST['quantity']) ||
+                        !isset($_POST['comment']) ||
                         !isset($_POST['orderid'])){
-                    echo "failed: not receiving enough data.";
+                    $jsonobj = new stdClass;
+                    $results = array(
+                        'success' => 0,
+                        'result_string' => "Missing parameters.");
+                    $jsonobj->result = $results;
+                    echo json_encode($jsonobj);
                     break;
                 }
                 
