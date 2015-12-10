@@ -115,7 +115,7 @@ if(isset($_POST['request'])){
     if($json['header']['request'] == "submit-order"){
         echo ">>>>>>>>I see you<<<<<<<<";
     }else{
-        echo ">>>>>>>>>>na..<<<<<<<<<<"
+        echo ">>>>>>>>>>na..<<<<<<<<<<";
     }
 }
 
