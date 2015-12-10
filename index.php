@@ -108,16 +108,15 @@ if(isset($_POST['request'])){
         echo $response;
     }
     
-}elseif (isset($_POST['submit-order'])) {
-    $data = json_decode($_POST["submit-order"]);
-    $data->msg = strrev($data->msg);
- 
-     echo json_encode($data);
-    
 }else{
-    $response = "<h1> No POST received </h1>";
-    echo $response;
+    $json = file_get_contents('php://input');
+    $obj = json_decode($json,true);
+    
+    if($json['header']['request'] == "submit-order"){
+        echo ">>>>>>>>I see you<<<<<<<<";
+    }
 }
+
 
 
 ?>
