@@ -25,8 +25,8 @@ if(isset($_POST['request'])){
                 
                 echo json_encode($jsonobj);
                 break;
-            };
-            case "fetch-chief":{
+            }
+            case "fetch-chiefs":{
                 
                 $result = mysqli_query($conn,"SELECT firstname,lastname FROM chief GROUP BY firshname,lastname");
                 
@@ -41,11 +41,27 @@ if(isset($_POST['request'])){
                 echo json_encode($jsonobj);
                 break;
             }
+            case "fetch-orders":{
+                
+                $result = mysqli_query($conn,"SELECT * FROM orders ORDER BY orderid;");
+                
+                $encode = array();
+                while($row = mysqli_fetch_assoc($result)){
+                    $encode[] = $row;
+                }
+                
+                $jsonobj = new stdClass();
+                $jsonobj->orders = $encode;
+                
+                echo json_encode($jsonobj);
+                break;
+            }
             case "submit-order":{
                 if(!isset($_POST['table-number']) && 
                         !isset($_POST['dish-name']) && 
                         !isset($_POST['quantity']) &&
-                        !isset($_POST['comment'])){
+                        !isset($_POST['comment']) &&
+                        !isset($_POST['orderid'])){
                     echo "failed: not receiving enough data.";
                     break;
                 }
@@ -53,10 +69,11 @@ if(isset($_POST['request'])){
                 $table_number = $_POST['table-number'];
                 $dish_name = $_POST['dish-name'];
                 $quantity = $_POST['quantity'];
+                $orderid = $_POST['orderid'];
                 $comment = $_POST['comment'];
                 
-                $sql = "INSERT INTO order (tablenumber, dishname, quantity, comment) 
-                        VALUES (" . $table_number . ", " . $dish_name . ", " . $quantity . ", " . $comment . ");" ; 
+                $sql = "INSERT INTO order (tablenumber, dishname, quantity, orderid, comment) 
+                        VALUES (" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "');" ; 
                 if(mysqli_query($conn,$sql)){
                     echo "Order submitted successfully.";
                 }else{
