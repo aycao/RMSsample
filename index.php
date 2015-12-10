@@ -77,14 +77,18 @@ if(isset($_POST['request'])){
                         VALUES (" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "');" ; 
                 if(mysqli_query($conn,$sql)){
                     $jsonobj = new stdClass;
-                    $jsonobj->success = 1;
-                    $jsonobj->result = "Order submitted successfully.";
+                    $results = array(
+                        'success' => 1,
+                        'result_string' => "Order submitted successfully.");
+                    $jsonobj->result = $results;
                     echo json_encode($jsonobj);
                     
                 }else{
                     $jsonobj = new stdClass;
-                    $jsonobj->success = 0;
-                    $jsonobj->result = "Failed to submit order.";
+                    $results = array(
+                        'success' => 0,
+                        'result_string' => "Failed to submit order");
+                    $jsonobj->result = $results;
                     echo json_encode($jsonobj);
                 }
                 
