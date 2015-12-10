@@ -76,9 +76,16 @@ if(isset($_POST['request'])){
                 $sql = "INSERT INTO order (tablenumber, dishname, quantity, orderid, comment) 
                         VALUES (" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "');" ; 
                 if(mysqli_query($conn,$sql)){
-                    echo "Order submitted successfully.";
+                    $jsonobj = new stdClass;
+                    $jsonobj->success = 1;
+                    $jsonobj->result = "Order submitted successfully.";
+                    echo json_encode($jsonobj);
+                    
                 }else{
-                    echo "Failed to submitted order: perhaps php sql error.";
+                    $jsonobj = new stdClass;
+                    $jsonobj->success = 0;
+                    $jsonobj->result = "Failed to submit order.";
+                    echo json_encode($jsonobj);
                 }
                 
                 break;
