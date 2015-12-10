@@ -2,7 +2,8 @@
 if(isset($_POST['request'])){
     if ($_POST['request'] == "fetch-menu" || 
             $_POST['request'] == "fetch-chief" ||
-            $_POST['request'] == 'submit-order'){
+            $_POST['request'] == 'submit-order'||
+            $_POST['request'] == "fetch-orders"){
         
         $configs = include('config.php');
         $conn=mysqli_connect($configs['host'],$configs['username'],$configs['password'],$configs['dbname']);
