@@ -78,7 +78,7 @@ if(isset($_POST['request'])){
                 $orderid = $_POST['orderid'];
                 $comment = $_POST['comment'];
                 
-                $sql = "INSERT INTO order (tablenumber, dishname, quantity, orderid, comment) 
+                $sql = "INSERT INTO orders (tablenumber, dishname, quantity, orderid, comment) 
                         VALUES (" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "');" ; 
                 if(mysqli_query($conn,$sql)){
                     $jsonobj = new stdClass;
@@ -122,7 +122,7 @@ if(isset($_POST['request'])){
         foreach($obj['dish-quant-pairs'] as $dish_quant_pair){
             $dish_name = $dish_quant_pair['dish-name'];
             $quantity = $dish_quant_pair['quantity'];
-            $sql .= "INSERT INTO order (tablenumber, dishname, quantity, orderid, comment) 
+            $sql .= "INSERT INTO orders (tablenumber, dishname, quantity, orderid, comment) 
                         VALUES (" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "'); " ; 
         }
         
