@@ -67,6 +67,8 @@ if($userequest){
                 
                 $result = mysqli_query($conn,"SELECT * FROM orders ORDER BY orderid, inputtime DESC;");
                 
+                $ordercount = 0;
+                
                 $encode = array();
                 $food_orders = array();
                 $dish_quant_pairs = array();
@@ -89,6 +91,7 @@ if($userequest){
                             unset($dish_quant_pairs);
                             $dish_quant_pairs = array();
                         }
+                        $ordercount++;
                         
                         $oldorderid = $neworderid;
                         $food_order = new stdClass();
@@ -107,6 +110,7 @@ if($userequest){
                     
                     $dish_quant_pair = new stdClass();
                     
+                    
                 }
                 // last record
                 $food_order->dish_quant_pairs = $dish_quant_pairs;
@@ -115,6 +119,7 @@ if($userequest){
                 //$jsonobj = new stdClass();
                 //$jsonobj->orders = $encode;
                 $theorders = new stdClass();
+                $theorders->ordercount = $ordercount;
                 $theorders->theorders = $food_orders;
                 echo json_encode($theorders);
                 
