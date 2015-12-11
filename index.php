@@ -25,6 +25,7 @@ if($usejson || $userequest){
 }
 
 
+
 if($userequest){
     if ($_POST['request'] == "fetch-menu" || 
             $_POST['request'] == "fetch-chief" ||
@@ -92,7 +93,6 @@ if($userequest){
                         $oldorderid = $neworderid;
                         $food_order = new stdClass();
                         $food_order->comment = "";
-                        
                         $food_order->orderid = $neworderid;
                         $food_order->table_number = $row['tablenumber'];
                         
@@ -105,6 +105,7 @@ if($userequest){
                         $food_order->comment .= $row['comment'];    
                     }
                     
+                    $dish_quant_pair = new stdClass();
                     
                 }
                 // last record
