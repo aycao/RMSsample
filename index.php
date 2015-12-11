@@ -135,12 +135,16 @@ if(isset($_POST['request'])){
             echo json_encode($jsonobj);
             
         }else{
+            
+            echo $sql;
+            /*
             $jsonobj = new stdClass;
             $results = array(
                 'success' => 0,
                 'result_string' => "Failed to submit order");
             $jsonobj->result = $results;
             echo json_encode($jsonobj);
+            */
         }
         
     }else{ 
