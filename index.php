@@ -118,12 +118,18 @@ if(isset($_POST['request'])){
         $orderid = $obj['header']['orderid'];
         $comment = $obj['header']['comment'];
         
-        $sql = "";
+        $sql = "INSERT INTO orders (tablenumber, dishname, quantity, orderid, comment) ";
+        $count = count($obj['dish-quant-pairs']);
+        $i = 0;
         foreach($obj['dish-quant-pairs'] as $dish_quant_pair){
             $dish_name = $dish_quant_pair['dish-name'];
             $quantity = $dish_quant_pair['quantity'];
-            $sql .= "INSERT INTO orders (tablenumber, dishname, quantity, orderid, comment) 
-                        VALUES (" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "'); " ; 
+            $sql .= " VALUES (" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "') " ; 
+            if((++$i) === $count){
+                $sql .= "; ";
+            }else{
+                $sql .= ", ";
+            }
         }
         
         if(mysqli_query($conn,$sql)){
