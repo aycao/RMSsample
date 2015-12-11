@@ -64,17 +64,59 @@ if($userequest){
             }
             case "fetch-orders":{
                 
-                $result = mysqli_query($conn,"SELECT * FROM orders ORDER BY orderid;");
+                $result = mysqli_query($conn,"SELECT * FROM orders ORDER BY orderid, inputtime DESC;");
                 
                 $encode = array();
+                $food_orders = array();
+                $dish_quant_pairs = array();
+                $dish_quant_pair = new stdClass();
+                $food_order = new stdClass();
+                $oldorderid = "";
+                $neworderid = "";
                 while($row = mysqli_fetch_assoc($result)){
                     $encode[] = $row;
+                    //echo $row['orderid'] .  "  " . $row['inputtime'] . "\r\n";
+                    //echo json_encode($row) . "\r\n";
+                    
+                    $neworderid = $row['orderid'];
+                    
+                    if($neworderid <> $oldorderid){
+                       
+                        if($oldorderid <> ""){
+                            $food_order->dish_quant_pairs = $dish_quant_pairs;
+                            $food_orders[] = ($food_order);
+                            unset($dish_quant_pairs);
+                            $dish_quant_pairs = array();
+                        }
+                        
+                        $oldorderid = $neworderid;
+                        $food_order = new stdClass();
+                        $food_order->comment = "";
+                        
+                        $food_order->orderid = $neworderid;
+                        $food_order->table_number = $row['tablenumber'];
+                        
+                    }
+                    
+                    $dish_quant_pair->dishname = $row['dishname'];
+                    $dish_quant_pair->quantity = $row['quantity'];
+                    $dish_quant_pairs[] = ($dish_quant_pair);
+                    if($row['comment'] <> "null"){
+                        $food_order->comment .= $row['comment'];    
+                    }
+                    
+                    
                 }
+                // last record
+                $food_order->dish_quant_pairs = $dish_quant_pairs;
+                $food_orders[] = ($food_order);
                 
-                $jsonobj = new stdClass();
-                $jsonobj->orders = $encode;
+                //$jsonobj = new stdClass();
+                //$jsonobj->orders = $encode;
+                $theorders = new stdClass();
+                $theorders->theorders = $food_orders;
+                echo json_encode($theorders);
                 
-                echo json_encode($jsonobj);
                 break;
             }
             case "submit-order":{
