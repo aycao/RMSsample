@@ -204,7 +204,7 @@ if($usejson){
         if(mysqli_query($conn,$sql)){
             $jsonobj = new stdClass;
             $results = array(
-                'success' => 1,
+                'success' => true,
                 'result_string' => "Order submitted successfully.");
             $jsonobj->result = $results;
             echo json_encode($jsonobj);
@@ -215,7 +215,7 @@ if($usejson){
             
             $jsonobj = new stdClass;
             $results = array(
-                'success' => 0,
+                'success' => false,
                 'result_string' => "Failed to submit order");
             $jsonobj->result = $results;
             echo json_encode($jsonobj);
