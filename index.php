@@ -113,9 +113,38 @@ if(isset($_POST['request'])){
     $obj = json_decode($json,true);
     
     if($obj['header']['request'] == "submit-order"){
-        echo ">>>>>>>>I see you<<<<<<<<";
-    }else{
-        echo ">>>>>>>>>>na..<<<<<<<<<<";
+        
+        $table_number = $obj['header']['table-number'];
+        $orderid = $obj['header']['orderid'];
+        $comment = $obj['header']['comment'];
+        
+        $sql = "";
+        foreach($obj['dish-quant-pairs'] as $dish_quant_pair){
+            $dish_name = $dish_quant_pair['dish-name'];
+            $quantity = $dish_quant_pair['quantity'];
+            $sql .= "INSERT INTO order (tablenumber, dishname, quantity, orderid, comment) 
+                        VALUES (" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "'); " ; 
+        }
+        
+        if(mysqli_query($conn,$sql)){
+            $jsonobj = new stdClass;
+            $results = array(
+                'success' => 1,
+                'result_string' => "Order submitted successfully.");
+            $jsonobj->result = $results;
+            echo json_encode($jsonobj);
+            
+        }else{
+            $jsonobj = new stdClass;
+            $results = array(
+                'success' => 0,
+                'result_string' => "Failed to submit order");
+            $jsonobj->result = $results;
+            echo json_encode($jsonobj);
+        }
+        
+    }else{ 
+        echo "Undentified request...";
     }
 }
 
