@@ -1,16 +1,36 @@
 <?php
+
+$userequest = false;
+$usejson = false;
+
 if(isset($_POST['request'])){
+    $userequest = true;
+}else{
+    $json = file_get_contents('php://input');
+    $obj = json_decode($json,true);
+    if($obj['header']['request'] == "submit-order"){
+        $usejson = true;
+    }
+}
+
+$configs;
+$conn;
+
+if($usejson || $userequest){
+    $configs = include('config.php');
+    $conn=mysqli_connect($configs['host'],$configs['username'],$configs['password'],$configs['dbname']);
+    if (mysqli_connect_errno($conn)){
+       echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    }
+}
+
+
+if($userequest){
     if ($_POST['request'] == "fetch-menu" || 
             $_POST['request'] == "fetch-chief" ||
             $_POST['request'] == 'submit-order'||
             $_POST['request'] == "fetch-orders"){
-        
-        $configs = include('config.php');
-        $conn=mysqli_connect($configs['host'],$configs['username'],$configs['password'],$configs['dbname']);
-        if (mysqli_connect_errno($conn)){
-           echo "Failed to connect to MySQL: " . mysqli_connect_error();
-        }
-        
+       
         switch($_POST['request']){
             case "fetch-menu": {
                 
@@ -107,8 +127,9 @@ if(isset($_POST['request'])){
         $response = "<h1> Don't know about this POST request... </h1>";
         echo $response;
     }
+}
     
-}else{
+if($usejson){
     $json = file_get_contents('php://input');
     $obj = json_decode($json,true);
     
@@ -124,7 +145,7 @@ if(isset($_POST['request'])){
         foreach($obj['dish-quant-pairs'] as $dish_quant_pair){
             $dish_name = $dish_quant_pair['dish-name'];
             $quantity = $dish_quant_pair['quantity'];
-            $sql .= " (" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "') " ; 
+            $sql .= "(" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "')" ; 
             if((++$i) === $count){
                 $sql .= "; ";
             }else{
@@ -142,20 +163,20 @@ if(isset($_POST['request'])){
             
         }else{
             
-            echo $sql;
-            /*
+            //echo $sql;
+            
             $jsonobj = new stdClass;
             $results = array(
                 'success' => 0,
                 'result_string' => "Failed to submit order");
             $jsonobj->result = $results;
             echo json_encode($jsonobj);
-            */
         }
         
     }else{ 
-        echo "Undentified request...";
+        echo "Undentified json request";
     }
+    mysqli_close($conn);
 }
 
 
