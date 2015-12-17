@@ -65,7 +65,7 @@ if($userequest){
             }
             case "fetch-orders":{
                 
-                $result = mysqli_query($conn,"SELECT * FROM orders ORDER BY processed, tablenumber;");
+                $result = mysqli_query($conn,"SELECT * FROM orders ORDER BY processed, tablenumber, dishname;");
                 
                 $ordercount = 0;
                 
