@@ -187,14 +187,22 @@ if($usejson){
         $table_number = $obj['header']['table-number'];
         $orderid = $obj['header']['orderid'];
         $comment = $obj['header']['comment'];
+        $processed = $obj['header']['processed'];
+        $cleared = $obj['header']['cleared'];
         
-        $sql = "INSERT INTO orders (tablenumber, dishname, quantity, orderid, comment) VALUES ";
+        $sql = "INSERT INTO orders (tablenumber, dishname, quantity, orderid, comment, processed, cleared) VALUES ";
         $count = count($obj['dish-quant-pairs']);
         $i = 0;
         foreach($obj['dish-quant-pairs'] as $dish_quant_pair){
             $dish_name = $dish_quant_pair['dish-name'];
             $quantity = $dish_quant_pair['quantity'];
-            $sql .= "(" . $table_number . ", '" . $dish_name . "', " . $quantity . ", '" . $orderid . "', '" . $comment . "')" ; 
+            $sql .= "(" . $table_number . ", '" . 
+                    $dish_name . "', " . 
+                    $quantity . ", '" . 
+                    $orderid . "', '" . 
+                    $comment . "', " .
+                    $processed . ", " .
+                    $cleared . ")" ; 
             if((++$i) === $count){
                 $sql .= "; ";
             }else{
