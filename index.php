@@ -65,7 +65,7 @@ if($userequest){
             }
             case "fetch-orders":{
                 
-                $result = mysqli_query($conn,"SELECT * FROM orders ORDER BY orderid, inputtime DESC;");
+                $result = mysqli_query($conn,"SELECT * FROM orders ORDER BY processed, tablenumber;");
                 
                 $ordercount = 0;
                 
@@ -125,7 +125,8 @@ if($userequest){
                 
                 break;
             }
-            case "submit-order":{
+            // not in use now !!!!
+            case "submit-order":{ 
                 if(!isset($_POST['table-number']) || 
                         !isset($_POST['dish-name'])|| 
                         !isset($_POST['quantity']) ||
