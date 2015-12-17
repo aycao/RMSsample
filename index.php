@@ -100,6 +100,7 @@ if($userequest){
                         $food_order->table_number = $row['tablenumber'];
                         $food_order->processed = $row['processed'];
                         $food_order->cleared = $row['cleared'];
+                        $food_order->chief = $row['chief'];
                         
                     }
                     
