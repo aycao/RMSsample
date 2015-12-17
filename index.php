@@ -95,9 +95,11 @@ if($userequest){
                         
                         $oldorderid = $neworderid;
                         $food_order = new stdClass();
-                        $food_order->comment = "";
+                        $food_order->comment = $row['comment'];
                         $food_order->orderid = $neworderid;
                         $food_order->table_number = $row['tablenumber'];
+                        $food_order->processed = $row['processed'];
+                        $food_order->cleared = $row['cleared'];
                         
                     }
                     
