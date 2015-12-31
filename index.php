@@ -24,8 +24,6 @@ if($usejson || $userequest){
     }
 }
 
-
-
 if($userequest){
     if ($_POST['request'] == "fetch-menu" || 
             $_POST['request'] == "fetch-chief" ||
@@ -181,7 +179,7 @@ if($userequest){
     }
 }
     
-if($usejson){
+elseif($usejson){
     $json = file_get_contents('php://input');
     $obj = json_decode($json,true);
     
@@ -239,6 +237,10 @@ if($usejson){
     mysqli_close($conn);
 }
 
-
+else{
+    $contents = file_get_contents("greeting.html");
+    echo $contents;
+}
 
 ?>
+
