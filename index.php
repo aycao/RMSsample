@@ -27,8 +27,9 @@ if($usejson || $userequest){
 if($userequest){
     if ($_POST['request'] == "fetch-menu" || 
             $_POST['request'] == "fetch-chief" ||
-            $_POST['request'] == 'submit-order'||
-            $_POST['request'] == "fetch-orders"){
+            $_POST['request'] == 'submit-order' ||
+            $_POST['request'] == "fetch-orders" ||
+            $_POST['request'] == "update-orders"){
        
         switch($_POST['request']){
             case "fetch-menu": {
@@ -123,6 +124,35 @@ if($userequest){
                 $theorders->ordercount = $ordercount;
                 $theorders->theorders = $food_orders;
                 echo json_encode($theorders);
+                
+                break;
+            }
+            
+            case "update-orders":{
+                $orderid = $_POST['orderid'];
+                $processed = $_POST['processed'] === 'true' ? true: false ;
+                $cleared = $_POST['cleared'] === 'true' ? true: false ;
+                
+                $sql = "UPDATE orders SET cleared = " + $cleared + ", processed = " + $processed + ";";
+                if(mysqli_query($conn,$sql)){
+                    $jsonobj = new stdClass;
+                    $results = array(
+                        'success' => true,
+                        'result_string' => "Order updated successfully.");
+                    $jsonobj->result = $results;
+                    echo json_encode($jsonobj);
+                    
+                }else{
+                    
+                    //echo $sql;
+                    
+                    $jsonobj = new stdClass;
+                    $results = array(
+                        'success' => false,
+                        'result_string' => "Failed to update order");
+                    $jsonobj->result = $results;
+                    echo json_encode($jsonobj);
+                }
                 
                 break;
             }
