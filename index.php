@@ -133,7 +133,7 @@ if($userequest){
                 $processed = $_POST['processed'];
                 $cleared = $_POST['cleared'];
                 
-                $sql = "UPDATE orders SET cleared = " . $cleared + ", processed = " . $processed . " WHERE orderid = '" . $orderid + "' ;";
+                $sql = "UPDATE orders SET cleared = " . $cleared . ", processed = " . $processed . " WHERE orderid = '" . $orderid + "' ;";
                 if(mysqli_query($conn,$sql)){
                     $jsonobj = new stdClass;
                     $results = array(
