@@ -130,8 +130,8 @@ if($userequest){
             
             case "update-orders":{
                 $orderid = $_POST['orderid'];
-                $processed = $_POST['processed'] === 'true' ? true: false ;
-                $cleared = $_POST['cleared'] === 'true' ? true: false ;
+                $processed = $_POST['processed'];
+                $cleared = $_POST['cleared'];
                 
                 $sql = "UPDATE orders SET cleared = " + $cleared + ", processed = " + $processed + ";";
                 if(mysqli_query($conn,$sql)){
